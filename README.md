@@ -1,6 +1,6 @@
 # Day 25 — Thiết kế giải pháp AI có trách nhiệm
 
-Day 25 là bài tập nhóm 2-3 người cùng chủ đề. Nhóm bắt đầu từ 2 file đã làm ở Day 24 (`01-risk-map.md` + `02-test-eval-plan.md`), kết thúc bằng **bộ kiểm thử cuối** (10-15 tình huống) + **3 lớp giải pháp** cho rủi ro quan trọng nhất.
+Day 25 là bài tập nhóm 2-3 người cùng chủ đề. Nhóm bắt đầu từ 2 file đã làm ở Day 24 (`day-24-summary/01_risk_map.md` + `day-24-summary/02-test-eval-plan.md`), kết thúc bằng **bộ kiểm thử cuối** (10-15 tình huống) + **3 lớp giải pháp** cho rủi ro quan trọng nhất.
 
 ---
 
@@ -54,11 +54,11 @@ Sao chép mẫu này vào `README.md` ở gốc kho bài và điền:
 
 ## Thành viên nhóm
 
-| # | Mã học viên | Họ tên đầy đủ |
-|---|-------------|---------------|
-| 1 | A20-XXXXX   | Nguyễn Văn A  |
-| 2 | A20-XXXXX   | Trần Thị B    |
-| 3 | A20-XXXXX   | Lê Văn C      |
+| #   | Mã học viên | Họ tên đầy đủ |
+| --- | ----------- | ------------- |
+| 1   | 2A202600013 | Chu Minh Quân |
+| 2   | 2A202600093 | Lê Đức Thanh  |
+
 
 ## Kết quả cuối
 
@@ -79,7 +79,7 @@ Sao chép mẫu này vào `README.md` ở gốc kho bài và điền:
 ## Quy trình làm bài
 
 ```text
-Đọc lại 01-risk-map.md + 02-test-eval-plan.md từ Day 24
+Đọc lại day-24-summary/01_risk_map.md + day-24-summary/02-test-eval-plan.md
    -> Điền 00-context.md
    -> Bài 1: Rà bộ kiểm thử
       -> Mở rộng: tìm sự cố thật + dùng AI gợi ý tình huống
@@ -94,6 +94,29 @@ Sao chép mẫu này vào `README.md` ở gốc kho bài và điền:
    -> Chỉnh lại file
    -> Nộp link kho bài qua LMS
 ```
+
+## Công việc cần thực hiện
+
+Nguồn đầu vào từ Day 24:
+
+- `day-24-summary/01_risk_map.md`: rủi ro chính là **C1 — Privacy / data leak** trong Flow C của track **Trợ lý ghi chú và tổng hợp chi tiêu**.
+- `day-24-summary/02-test-eval-plan.md`: test set v0 gồm **T1–T5** và eval plan cho rủi ro lộ dữ liệu riêng tư trong báo cáo chi tiêu cuối tháng.
+
+Các việc cần làm trong Day 25:
+
+1. Đọc lại `day-24-summary/01_risk_map.md` để nắm bối cảnh, harm map, rủi ro chính C1, layer chính là Input và layer phụ là UI.
+2. Đọc lại `day-24-summary/02-test-eval-plan.md` để lấy safety question, test cases T1–T5, pass/fail criteria, severity rule và launch gate.
+3. Điền `worksheet/00-context.md` theo chủ đề Track 04, Flow C: báo cáo chi tiêu cuối tháng.
+4. Hoàn thiện `worksheet/01-test-set-review/1-diverge.md`: tìm thêm sự cố thật có nguồn, dùng AI brainstorm tình huống mới, chọn các tình huống đáng kiểm thử.
+5. Hoàn thiện `worksheet/01-test-set-review/2-converge.md`: gộp tình huống, lọc trùng, chấm Impact x Urgency, chọn 10-15 tình huống cuối.
+6. Viết file cuối Bài 1 tại `worksheet/01-test-set-review/3-FINAL-test-set-eval-plan.md`: bộ kiểm thử cuối và kế hoạch chấm rõ PASS / FAIL / UNCLEAR.
+7. Hoàn thiện `worksheet/02-solution-design/1-map-and-format.md`: chọn rủi ro C1, phân tích nguyên nhân gốc, thiết kế 3 lớp giải pháp.
+8. Tạo artifact cho 3 lớp giải pháp:
+   - `worksheet/02-solution-design/artifact/1-uiux/card.md` và `demo.*`
+   - `worksheet/02-solution-design/artifact/2-prompt/card.md` và `demo.md`
+   - `worksheet/02-solution-design/artifact/3-architecture/card.md` và `demo.md`
+9. Phản biện chéo với nhóm khác, ghi nhận điểm cần sửa, rồi cập nhật lại các file cuối.
+10. Kiểm tra checklist trước khi nộp, tạo kho GitHub công khai đúng cú pháp `Day25-MãNhóm`, đẩy toàn bộ bài lên và nộp link qua LMS trước **23:59**.
 
 ## Bài 1 — Rà bộ kiểm thử
 
@@ -146,33 +169,35 @@ worksheet/02-solution-design/1-map-and-format.md
 
 Ba lớp giải pháp:
 
-| Lớp | Thư mục | Mục đích |
-|---|---|---|
-| Giao diện | `artifact/1-uiux/` | Giúp người dùng thấy cảnh báo, nguồn, cách chuyển sang người thật |
-| Chỉ dẫn AI | `artifact/2-prompt/` | Buộc AI hỏi lại, từ chối, hoặc dẫn nguồn khi cần |
-| Kiến trúc dữ liệu | `artifact/3-architecture/` | Đảm bảo AI tra cứu đúng nguồn và biết xử lý khi thiếu nguồn |
+| Lớp               | Thư mục                    | Mục đích                                                          |
+| ----------------- | -------------------------- | ----------------------------------------------------------------- |
+| Giao diện         | `artifact/1-uiux/`         | Giúp người dùng thấy cảnh báo, nguồn, cách chuyển sang người thật |
+| Chỉ dẫn AI        | `artifact/2-prompt/`       | Buộc AI hỏi lại, từ chối, hoặc dẫn nguồn khi cần                  |
+| Kiến trúc dữ liệu | `artifact/3-architecture/` | Đảm bảo AI tra cứu đúng nguồn và biết xử lý khi thiếu nguồn       |
 
 Ba lớp này bổ sung cho nhau. Một lớp có thể lọt lỗi, nhiều lớp sẽ giảm rủi ro tốt hơn.
 
 ## Tài liệu trong thư mục này
 
-| File / Thư mục | Dùng để làm gì |
-|---|---|
-| `track-bank-scenario-kit-v1.md` | Chọn và đọc lại bối cảnh chủ đề |
-| `worksheet/00-context.md` | Điền bối cảnh một lần, đưa vào đầu mọi cuộc trò chuyện với AI |
-| `worksheet/01-test-set-review/` | Làm Bài 1. Hướng dẫn chi tiết nằm ngay trong từng file worksheet |
-| `worksheet/02-solution-design/` | Làm Bài 2. Hướng dẫn chọn tầng, demo, phản biện nằm trong worksheet |
-| `prompts/` | Prompt tham khảo cho từng bước |
+| File / Thư mục                        | Dùng để làm gì                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------ |
+| `day-24-summary/01_risk_map.md`       | Nguồn Day 24: bối cảnh, harm map, rủi ro chính C1 và layer mapping                   |
+| `day-24-summary/02-test-eval-plan.md` | Nguồn Day 24: safety question, test set v0 T1-T5, pass/fail criteria và eval process |
+| `track-bank-scenario-kit-v1.md`       | Chọn và đọc lại bối cảnh chủ đề                                                      |
+| `worksheet/00-context.md`             | Điền bối cảnh một lần, đưa vào đầu mọi cuộc trò chuyện với AI                        |
+| `worksheet/01-test-set-review/`       | Làm Bài 1. Hướng dẫn chi tiết nằm ngay trong từng file worksheet                     |
+| `worksheet/02-solution-design/`       | Làm Bài 2. Hướng dẫn chọn tầng, demo, phản biện nằm trong worksheet                  |
+| `prompts/`                            | Prompt tham khảo cho từng bước                                                       |
 
 ## Bảng dùng prompt tham khảo
 
-| Prompt tham khảo | Dùng khi nào | Lưu kết quả vào |
-|---|---|---|
-| `prompts/01-deep-research.md` | Tìm sự cố thật | `1-diverge.md` Phần A |
-| `prompts/02-brainstorm.md` | Dùng AI gợi ý tình huống | `1-diverge.md` Phần B |
-| `prompts/03-convergent-analysis.md` | Lọc trùng và ưu tiên | `2-converge.md` |
-| `prompts/04-solution-options.md` | Gợi ý hướng giải pháp | `1-map-and-format.md` |
-| `prompts/05a-*` đến `05f-*` | Dựng demo nhanh | `artifact/*/demo.*` |
+| Prompt tham khảo                    | Dùng khi nào             | Lưu kết quả vào       |
+| ----------------------------------- | ------------------------ | --------------------- |
+| `prompts/01-deep-research.md`       | Tìm sự cố thật           | `1-diverge.md` Phần A |
+| `prompts/02-brainstorm.md`          | Dùng AI gợi ý tình huống | `1-diverge.md` Phần B |
+| `prompts/03-convergent-analysis.md` | Lọc trùng và ưu tiên     | `2-converge.md`       |
+| `prompts/04-solution-options.md`    | Gợi ý hướng giải pháp    | `1-map-and-format.md` |
+| `prompts/05a-*` đến `05f-*`         | Dựng demo nhanh          | `artifact/*/demo.*`   |
 
 ## Cách dùng prompt tham khảo
 
@@ -198,12 +223,12 @@ AI chỉ hỗ trợ dựng bản nháp. Nhóm vẫn chịu trách nhiệm kiểm
 
 ## Lỗi hay mắc
 
-| Đừng làm | Nên làm |
-|---|---|
-| Bỏ qua `00-context.md` | Điền bối cảnh trước khi dùng AI |
-| Nộp mỗi file cuối | Giữ cả file trung gian |
-| AI viết xong là nộp | Nhóm phải đọc, sửa, kiểm chứng |
-| Chỉ làm một lớp giải pháp | Làm đủ 3 lớp: giao diện, chỉ dẫn AI, kiến trúc |
-| Demo chỉ để nhìn đẹp | Demo phải giúp người khác hiểu và phản biện |
-| Để kho bài ở chế độ riêng tư | Kho GitHub phải công khai |
-| Đặt tên kho bài `Day-25-team-final` | Đúng cú pháp `Day25-MãNhóm` |
+| Đừng làm                            | Nên làm                                        |
+| ----------------------------------- | ---------------------------------------------- |
+| Bỏ qua `00-context.md`              | Điền bối cảnh trước khi dùng AI                |
+| Nộp mỗi file cuối                   | Giữ cả file trung gian                         |
+| AI viết xong là nộp                 | Nhóm phải đọc, sửa, kiểm chứng                 |
+| Chỉ làm một lớp giải pháp           | Làm đủ 3 lớp: giao diện, chỉ dẫn AI, kiến trúc |
+| Demo chỉ để nhìn đẹp                | Demo phải giúp người khác hiểu và phản biện    |
+| Để kho bài ở chế độ riêng tư        | Kho GitHub phải công khai                      |
+| Đặt tên kho bài `Day-25-team-final` | Đúng cú pháp `Day25-MãNhóm`                    |

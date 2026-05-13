@@ -1,41 +1,70 @@
 ---
 artifact: 3 — Demo kiến trúc dữ liệu
-format: sơ đồ xử lý + bảng thành phần
+format: sơ đồ xử lý / Mermaid
 ---
 
-# demo.md — Demo kiến trúc dữ liệu
-
-File này dùng để đặt sơ đồ và mô tả ngắn cách hệ thống giảm rủi ro.
+# demo.md — Demo kiến trúc dữ liệu (PII Scrubber Flow)
 
 ---
 
-## 1. Sơ đồ cách hệ thống xử lý
+## 1. Sơ đồ cách hệ thống xử lý (Mermaid)
 
-```text
-[Đặt sơ đồ ở đây]
-
-Ví dụ khung:
-
-Người dùng hỏi
-  -> Phân loại câu hỏi
-  -> Có phải câu hỏi rủi ro cao không?
-      -> Không: AI trả lời như bình thường
-      -> Có: Tra nguồn chính thức
-          -> Có dữ liệu: AI trả lời kèm nguồn
-          -> Không có dữ liệu: Chuyển sang người thật
-  -> Ghi lại để theo dõi lỗi
+```mermaid
+sequenceDiagram
+    participant User as 👤 Người dùng
+    participant App as 📱 MoneyMind App (UI)
+    participant Scrubber as 🛡️ PII Scrubber Service
+    participant LLM as 🧠 LLM Engine
+    
+    User->>App: Bấm nút "Tổng hợp báo cáo để Share"
+    App->>Scrubber: Truy vấn Raw Transactions
+    
+    Note over Scrubber: Chạy Regex & NER<br>Phát hiện Tên, STK, Bệnh lý
+    Scrubber-->>Scrubber: Masking (Nguyễn Văn A -> [Tên_Ẩn])
+    
+    Scrubber->>LLM: Gửi Anonymized Transactions
+    Note over LLM: Áp dụng System Prompt (Lớp 2)
+    LLM-->>App: Trả về Share-safe Summary
+    
+    App->>User: Hiển thị Preview Cảnh báo (Lớp 1)
 ```
 
 ---
 
-## 2. Thành phần chính
+## 2. Thành phần chính (Data Transformation)
+
+**Payload Gốc (Raw Data từ App gửi đi):**
+```json
+{
+  "transactions": [
+    {
+      "id": "T01",
+      "amount": 5000000,
+      "category": "Chuyển khoản",
+      "description": "Chuyển cho Nguyễn Văn A trả nợ lô đề STK 123456789"
+    }
+  ]
+}
+```
+
+**Payload Sau khi qua Scrubber (Được đưa vào LLM):**
+```json
+{
+  "transactions": [
+    {
+      "id": "T01",
+      "amount": 5000000,
+      "category": "Thanh toán tín dụng cá nhân",
+      "description": "Chuyển cho [PERSON] mục đích [DEBT] STK [REDACTED]"
+    }
+  ]
+}
+```
 
 | Thành phần | Nhận gì? | Làm gì? | Trả ra gì? |
 |---|---|---|---|
-| Phân loại câu hỏi | Câu hỏi của người dùng | Xác định có rủi ro cao không | Trả lời thường / cần kiểm tra nguồn |
-| Nguồn chính thức | Chủ đề cần kiểm tra | Tìm dữ liệu mới nhất | Thông tin + nguồn |
-| Bộ xử lý khi thiếu nguồn | Kết quả không có dữ liệu | Không cho AI đoán | Yêu cầu chuyển sang người thật |
-| Ghi lại lỗi | Câu hỏi + kết quả | Lưu lỗi để xem lại | Danh sách lỗi lặp lại |
+| PII Scrubber | Dữ liệu giao dịch thô (Raw) | Chạy mô hình NER nhận diện thực thể tên, số, và keyword nhạy cảm ("nợ", "bệnh") để thay thế bằng thẻ (tags) ẩn danh. | Dữ liệu giao dịch đã ẩn danh (Anonymized Data) |
+| LLM Engine | Anonymized Data & User Prompt | Phân tích và viết tóm tắt dựa trên dữ liệu không còn thông tin định danh cá nhân. | Báo cáo tóm tắt an toàn (Share-safe Summary) |
 
 ---
 
@@ -43,16 +72,13 @@ Người dùng hỏi
 
 | Khi nào lỗi xảy ra? | Hệ thống làm gì? | Người dùng thấy gì? |
 |---|---|---|
-| Nguồn chính thức không có dữ liệu | | |
-| Nguồn bị lỗi hoặc quá chậm | | |
-| Câu hỏi vượt phạm vi AI | | |
-| Lỗi này lặp lại nhiều lần | | |
+| PII Scrubber bị quá tải/time-out | Ngắt luồng gọi LLM, không sinh báo cáo bằng AI. | Fallback: Hiển thị báo cáo thống kê tĩnh (biểu đồ tròn) do app tự vẽ, kèm thông báo "AI đang bận". |
+| Dịch vụ nhận diện tên người (NER) bị sai sót | Mask nhầm các từ không nhạy cảm (vd: Quán Phở Bà Tám -> Phở [PERSON]). | Báo cáo hiển thị có chút kỳ quặc, nhưng ưu tiên An toàn (False Positive tốt hơn False Negative). |
 
 ---
 
 ## 4. Kiểm tra nhanh
 
-- [ ] Sơ đồ không chỉ là “AI trả lời tốt hơn”, mà có bước kiểm tra cụ thể.
-- [ ] Có cách xử lý khi thiếu dữ liệu.
-- [ ] Có cách chuyển sang người thật.
-- [ ] Có cách theo dõi để lần sau sửa tốt hơn.
+- [x] Sơ đồ không chỉ là “AI trả lời tốt hơn”, mà có bước kiểm tra cụ thể (PII Scrubber đứng trước LLM).
+- [x] Có cách xử lý khi thiếu dữ liệu / lỗi Scrubber (Fallback biểu đồ tĩnh).
+- [x] Thể hiện rõ việc Data Minimization trước khi tới LLM.

@@ -31,8 +31,8 @@ Ba lớp này bổ sung cho nhau. Nếu một lớp lọt lỗi, lớp khác v�
 
 ## Thông tin nhóm
 
-- **Chủ đề**: [...]
-- **Thành viên**: [...]
+- **Chủ đề**: Trợ lý Quản lý Tài chính Cá nhân (Track 04)
+- **Thành viên**: Chu Minh Quân, Lê Đức Thanh
 - **Ngày**: 2026-05-13
 
 ---
@@ -41,19 +41,19 @@ Ba lớp này bổ sung cho nhau. Nếu một lớp lọt lỗi, lớp khác v�
 
 ### Rủi ro chính được chọn
 
-- **ID tình huống**: T-__
-- **Mô tả ngắn**: Khi [...], AI có xu hướng [...], gây [...] cho [...]
-- **Mức độ**: [Nặng / Vừa]
-- **Điểm rủi ro**: [...]
-- **Vì sao chọn tình huống này**: [...]
+- **ID tình huống**: T-02
+- **Mô tả ngắn**: Khi user yêu cầu xuất hoặc chia sẻ báo cáo chi tiêu, AI có xu hướng trích dẫn nguyên văn dữ liệu giao dịch thô (raw transactions), gây rò rỉ thông tin định danh (PII) và nội dung nhạy cảm cho bên thứ ba.
+- **Mức độ**: Nặng
+- **Điểm rủi ro**: 25
+- **Vì sao chọn tình huống này**: Đây là điểm yếu chí mạng của tính năng "Share" - tính năng cốt lõi của Flow C. Nếu lỗi xảy ra, thiệt hại không chỉ dừng lại ở người dùng mà còn ảnh hưởng đến người thân/đối tác của họ, vi phạm nghiêm trọng NĐ 13/2023.
 
 ### Tìm nguyên nhân gốc
 
 Đừng chỉ mô tả lỗi. Hãy trả lời: vì sao lỗi xảy ra?
 
-- [ ] Thiếu nguồn dữ liệu đúng.
-- [ ] AI đoán khi không biết.
-- [ ] Giao diện khiến người dùng tin quá mức.
+- [x] Thiếu nguồn dữ liệu đúng (Dữ liệu đưa vào AI chưa được ẩn danh hóa).
+- [x] AI đoán khi không biết (Hoặc AI quá "nhiệt tình" liệt kê chi tiết để chứng minh tính chính xác).
+- [x] Giao diện khiến người dùng tin quá mức (Thiếu bước preview an toàn trước khi bấm nút Share).
 - [ ] Quy trình thiếu người duyệt hoặc thiếu bước chuyển sang người thật.
 - [ ] Không có theo dõi sau khi ra mắt.
 - [ ] Khác: [...]
@@ -62,30 +62,11 @@ Ba lớp này bổ sung cho nhau. Nếu một lớp lọt lỗi, lớp khác v�
 
 | Nguyên nhân gốc | Tầng ưu tiên sửa | Lớp giải pháp liên quan |
 |---|---|---|
-| Thiếu nguồn đúng | Dữ liệu / tra cứu nguồn (RAG) / chính sách nguồn | `3-architecture` là chính |
-| AI đoán bừa | Chỉ dẫn hệ thống / quy tắc từ chối / dẫn nguồn | `2-prompt` là chính |
-| Người dùng tin quá mức | Giao diện cảnh báo / cách viết mức tin cậy | `1-uiux` là chính |
-| Tình huống nhạy cảm | Người duyệt / chuyển sang người thật | `1-uiux` + `2-prompt` + `3-architecture` |
-| Lỗi lặp lại sau khi ra mắt | Theo dõi / vòng phản hồi | `3-architecture` là chính |
+| Dữ liệu thô đưa vào AI | Kiến trúc dữ liệu / PII Scrubber | `3-architecture` là chính |
+| AI liệt kê chi tiết nhạy cảm | Chỉ dẫn hệ thống / Quy tắc Privacy | `2-prompt` là chính |
+| Thiếu preview an toàn | Giao diện cảnh báo / Share-safe mode | `1-uiux` là chính |
 
 Nguyên tắc: lỗi ở tầng nào, ưu tiên sửa ở tầng đó. Đừng chỉ thêm cảnh báo giao diện nếu nguyên nhân gốc là thiếu nguồn dữ liệu hoặc AI đoán khi không biết.
-
-### 10 tầng giải pháp tham khảo
-
-Không bắt buộc dùng đủ 10 tầng. Bảng này giúp nhóm chọn đúng hướng sửa.
-
-| Tầng | Khi nào dùng |
-|---|---|
-| Giao diện | Người dùng tin AI quá mức, thiếu cảnh báo, thiếu nguồn, thiếu nút chuyển sang người thật |
-| Chỉ dẫn AI | AI đoán khi không biết, không hỏi lại, không từ chối |
-| Quy trình xử lý | Cần phân loại ý định, chuyển đúng nơi xử lý, có cách xử lý khi AI không nên trả lời |
-| Dữ liệu / tra cứu nguồn (RAG) | Thiếu nguồn đúng, nguồn cũ, AI không dựa vào nguồn đáng tin cậy |
-| Theo dõi | Lỗi lặp lại sau khi ra mắt nhưng không ai thấy |
-| Chính sách / thông báo giới hạn | Người dùng không biết giới hạn của AI |
-| Người duyệt / phê duyệt | Tình huống pháp lý, y tế, tài chính, tuyển dụng, hoặc tác động lớn |
-| Vai trò trách nhiệm | Có cảnh báo nhưng không ai chịu trách nhiệm xử lý |
-| Vòng phản hồi | Cần người dùng / người rà báo lỗi để cập nhật hệ thống |
-| Kiến trúc lai | LLM một mình không đủ, cần rule, classifier, hoặc nhiều bước kiểm tra |
 
 ### 4 hành động phòng vệ
 
@@ -100,22 +81,19 @@ Gợi ý theo mức rủi ro:
 
 | Mức rủi ro | Nên có |
 |---|---|
-| Nhẹ | Ít nhất 1 hành động |
-| Vừa | Ít nhất 2 hành động |
 | Nặng | Ít nhất 3 hành động |
-| Rất nặng / không đảo ngược được | Cố gắng đủ 4 hành động + có người chịu trách nhiệm |
 
 ### Kết luận Phần A
 
-**Nguyên nhân gốc**: [...]
+**Nguyên nhân gốc**: Hệ thống chưa có cơ chế ẩn danh hóa dữ liệu trước khi nạp vào LLM, đồng thời Prompt chưa đủ mạnh để ngăn LLM "bê" nguyên xi data vào báo cáo xuất ra.
 
-**Tầng chính cần sửa**: [...]
+**Tầng chính cần sửa**: Kiến trúc dữ liệu (PII Scrubber) & Chỉ dẫn AI (Privacy Guardrails).
 
 **Vì sao cần 3 lớp giải pháp**:
 
-- Lớp giao diện: [...]
-- Lớp chỉ dẫn AI: [...]
-- Lớp kiến trúc dữ liệu: [...]
+- Lớp giao diện: Giúp người dùng kiểm soát bản báo cáo trước khi chia sẻ (Thông báo & Khắc phục).
+- Lớp chỉ dẫn AI: Chốt chặn mềm để AI không bao giờ liệt kê chi tiết PII ngay cả khi user ép buộc (Ngăn).
+- Lớp kiến trúc dữ liệu: Chốt chặn cứng đảm bảo AI không bao giờ nhìn thấy dữ liệu thô nhạy cảm (Phát hiện & Ngăn).
 
 ---
 
@@ -125,26 +103,15 @@ Mỗi lớp cần một bản demo. Demo giúp biến ý tưởng thành thứ t
 
 | Lớp | Thư mục | Định dạng demo chọn | Thời gian dự kiến |
 |---|---|---|---|
-| Giao diện | `1-uiux` | [vẽ tay / Excalidraw / Figma / HTML / ASCII / Mermaid] | __ phút |
-| Chỉ dẫn AI | `2-prompt` | [bản prompt trong Markdown + ví dụ] | __ phút |
-| Kiến trúc dữ liệu | `3-architecture` | [ASCII / Mermaid / sơ đồ hộp-mũi tên] | __ phút |
+| Giao diện | `1-uiux` | ASCII UI Flow | 10 phút |
+| Chỉ dẫn AI | `2-prompt` | Markdown Prompt + Example | 10 phút |
+| Kiến trúc dữ liệu | `3-architecture` | Mermaid Sequence Diagram | 10 phút |
 
 **Lý do chọn demo**
 
-- Giao diện: [...]
-- Chỉ dẫn AI: [...]
-- Kiến trúc dữ liệu: [...]
-
-Gợi ý: có thể dùng AI để dựng nhanh bản nháp demo, nhưng nhóm phải đọc lại và sửa.
-
-### Chọn demo theo điều cần chứng minh
-
-| Nếu cần chứng minh... | Demo phù hợp |
-|---|---|
-| Người dùng nhìn thấy gì | Sketch, Figma, HTML, ASCII UI |
-| AI được chỉ dẫn thế nào | Bản prompt trong Markdown, ví dụ trả lời |
-| Dữ liệu đi qua đâu | Sơ đồ hộp-mũi tên, ASCII, Mermaid |
-| Quy trình chuyển sang người thật | Sơ đồ quy trình |
+- Giao diện: Thể hiện rõ nút bật "Chế độ chia sẻ an toàn".
+- Chỉ dẫn AI: Dễ dàng thử nghiệm độ tuân thủ của AI.
+- Kiến trúc dữ liệu: Minh họa rõ vị trí của bộ lọc PII Scrubber trong luồng dữ liệu.
 
 ---
 
@@ -154,22 +121,22 @@ Ghi tóm tắt ở đây. Chi tiết nằm trong `card.md` và `demo.*` của t�
 
 ### Lớp 1 — Giao diện (`artifact/1-uiux/`)
 
-- **Cách tiếp cận**: [...]
-- **Hành động phòng vệ bao phủ**: [Thông báo / Phát hiện / Khắc phục]
-- **Demo**: [...]
-- **Trạng thái**: [Chưa làm / Đang làm / Xong]
+- **Cách tiếp cận**: Thêm màn hình "Share-Safe Preview". Khi user chọn chia sẻ, app tự động hiển thị bản báo cáo đã mask tên người nhận và nội dung nhạy cảm.
+- **Hành động phòng vệ bao phủ**: Thông báo / Khắc phục
+- **Demo**: ASCII UI
+- **Trạng thái**: Đang làm
 
 Link chi tiết:
 
 - `artifact/1-uiux/card.md`
-- `artifact/1-uiux/demo.*`
+- `artifact/1-uiux/demo.md`
 
 ### Lớp 2 — Chỉ dẫn AI (`artifact/2-prompt/`)
 
-- **Cách tiếp cận**: [...]
-- **Hành động phòng vệ bao phủ**: [Ngăn / Từ chối / Hỏi lại / Dẫn nguồn]
-- **Demo**: [...]
-- **Trạng thái**: [Chưa làm / Đang làm / Xong]
+- **Cách tiếp cận**: Thiết lập System Instruction nghiêm ngặt: "Tuyệt đối không liệt kê Tên, Số tài khoản, hoặc nội dung giao dịch nhạy cảm". Cung cấp các Negative Examples về rò rỉ dữ liệu.
+- **Hành động phòng vệ bao phủ**: Ngăn
+- **Demo**: Markdown Prompt
+- **Trạng thái**: Đang làm
 
 Link chi tiết:
 
@@ -178,10 +145,10 @@ Link chi tiết:
 
 ### Lớp 3 — Kiến trúc dữ liệu (`artifact/3-architecture/`)
 
-- **Cách tiếp cận**: [...]
-- **Hành động phòng vệ bao phủ**: [Ngăn / Phát hiện / Khắc phục]
-- **Demo**: [...]
-- **Trạng thái**: [Chưa làm / Đang làm / Xong]
+- **Cách tiếp cận**: Triển khai service PII Scrubber sử dụng NLP để phát hiện thực thể (NER) và Regex để ẩn danh hóa dữ liệu trước khi đẩy vào Vector DB hoặc Context Window.
+- **Hành động phòng vệ bao phủ**: Ngăn / Phát hiện
+- **Demo**: Mermaid Diagram
+- **Trạng thái**: Đang làm
 
 Link chi tiết:
 
@@ -194,37 +161,9 @@ Link chi tiết:
 
 | Câu hỏi | Trả lời |
 |---|---|
-| Rủi ro chính đã chọn là gì? | T-__ |
-| Nguyên nhân gốc là gì? | [...] |
-| 3 lớp giải pháp đã đủ chưa? | Giao diện: __ / Chỉ dẫn AI: __ / Kiến trúc: __ |
-| 4 hành động đã bao phủ chưa? | Ngăn: __ / Phát hiện: __ / Khắc phục: __ / Thông báo: __ |
-| Nhóm khác đã góp ý chưa? | [...] |
-| Nhóm đã sửa gì sau phản biện? | [...] |
-
-## Phản biện chéo: 4 câu phải trả lời
-
-Khi nhóm khác góp ý, hoặc khi nhóm tự rà lại, dùng 4 câu này:
-
-| Góc phản biện | Câu hỏi |
-|---|---|
-| Đúng tầng | Giải pháp có sửa đúng nguyên nhân gốc không? |
-| Cụ thể | Demo có đủ rõ để hiểu cách vận hành không? |
-| Đủ lớp | 3 lớp có bổ sung cho nhau không, hay đang lặp cùng một ý? |
-| Tác dụng phụ | Giải pháp có làm chậm, tốn kém, rối giao diện, hoặc gây hiểu nhầm mới không? |
-
-Ghi góp ý cụ thể vào `card.md` hoặc phần tổng kiểm tra. Không ghi chung chung "ổn" hoặc "chưa ổn".
-
-## Gợi ý chia việc
-
-Nhóm 3 người:
-
-- Thành viên A: `artifact/1-uiux/`
-- Thành viên B: `artifact/2-prompt/`
-- Thành viên C: `artifact/3-architecture/`
-
-Nhóm 2 người:
-
-- Một người phụ trách 2 lớp.
-- Người còn lại phụ trách 1 lớp và rà lại 2 lớp kia.
-
-5 phút cuối: cả nhóm đọc chéo 3 lớp, sửa lại bảng tổng kiểm tra, rồi chuẩn bị phản biện chéo.
+| Rủi ro chính đã chọn là gì? | T-02 (Rò rỉ dữ liệu khi Export/Share) |
+| Nguyên nhân gốc là gì? | Dữ liệu nhạy cảm chưa được lọc trước khi nạp vào AI. |
+| 3 lớp giải pháp đã đủ chưa? | Giao diện: Đang làm / Chỉ dẫn AI: Đang làm / Kiến trúc: Đang làm |
+| 4 hành động đã bao phủ chưa? | Ngăn: Có / Phát hiện: Có / Khắc phục: Có / Thông báo: Có |
+| Nhóm khác đã góp ý chưa? | [Đang chờ] |
+| Nhóm đã sửa gì sau phản biện? | [Đang chờ] |

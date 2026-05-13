@@ -15,10 +15,10 @@ Lý do: AI không tự nhớ bối cảnh giữa các cuộc trò chuyện. Nế
 
 ## 1. Sản phẩm
 
-- **Tên sản phẩm / bot**: [...]
-- **Sản phẩm giúp ai làm gì**: [...]
-- **Người dùng gặp sản phẩm ở đâu**: [website / ứng dụng / chatbot / kiosk / nội bộ công ty]
-- **Giai đoạn hiện tại**: [chuẩn bị ra mắt / đang thử nghiệm / đã chạy thật]
+- **Tên sản phẩm / bot**: MoneyMindAI
+- **Sản phẩm giúp ai làm gì**: MoneyMindAI giúp người trẻ tự quản lý chi tiêu xem lại báo cáo chi tiêu cuối tháng, tổng hợp các nhóm chi tiêu lớn, phát hiện khoản bất thường và so sánh xu hướng tăng/giảm so với tháng trước.
+- **Người dùng gặp sản phẩm ở đâu**: Ứng dụng quản lý chi tiêu cá nhân trên mobile app.
+- **Giai đoạn hiện tại**: Ý tưởng/demo học tập.
 
 ---
 
@@ -26,43 +26,50 @@ Lý do: AI không tự nhớ bối cảnh giữa các cuộc trò chuyện. Nế
 
 **AI được làm gì**
 
-- [...]
-- [...]
-- [...]
+- Tổng hợp chi tiêu theo nhóm như ăn uống, đi lại, học tập, sức khỏe, nhà ở, chuyển khoản cá nhân và hỗ trợ gia đình.
+- So sánh xu hướng chi tiêu giữa tháng hiện tại và tháng trước nếu dữ liệu đủ rõ.
+- Đánh dấu giao dịch hoặc nhóm chi tiêu bất thường để user tự kiểm tra lại.
+- Viết tóm tắt ngắn gọn ở mức category, không hiển thị chi tiết giao dịch nhạy cảm.
 
 **AI không được làm gì**
 
-- [...]
-- [...]
-- [...]
+- Không được hiển thị tên người nhận, số tài khoản, số điện thoại, nội dung chuyển khoản riêng tư hoặc thông tin có thể định danh người khác trong báo cáo tổng hợp.
+- Không được lặp lại các nội dung nhạy cảm như trả nợ, khám bệnh, tiền thuốc, hỗ trợ người thân hoặc quan hệ gia đình nếu không cần thiết.
+- Không được tư vấn đầu tư, vay nợ, cắt khoản chi quan trọng hoặc đưa kết luận tài chính chắc chắn thay user.
+- Không được tự động xuất/chia sẻ báo cáo chứa raw transaction hoặc dữ liệu nhạy cảm.
 
 **Vì sao có giới hạn này**
 
-[Ví dụ: rủi ro pháp lý, an toàn người dùng, quy định ngành, dữ liệu chưa đủ tin cậy.]
+MoneyMindAI xử lý dữ liệu tài chính cá nhân và có thể chứa PII của user hoặc người liên quan trong giao dịch. Nếu AI đưa lại dữ liệu thô vào summary, user có thể bị lộ thông tin riêng tư, người khác trong giao dịch cũng bị ảnh hưởng dù không trực tiếp dùng app. Vì sản phẩm đang ở mức ý tưởng/demo học tập, dữ liệu và cơ chế bảo vệ chưa đủ để cho AI đưa ra lời khuyên tài chính chắc chắn hoặc chia sẻ báo cáo mặc định.
 
 ---
 
 ## 3. Người dùng
 
-- **Là ai**: [tuổi, vai trò, trình độ công nghệ, bối cảnh sử dụng]
-- **Họ hỏi AI khi nào**: [...]
-- **Họ cần quyết định gì sau khi hỏi AI**: [...]
-- **Khi nào họ dễ bị tổn thương / dễ hiểu sai**: [...]
-- **Họ thường tin AI đến mức nào**: [tin ngay / có kiểm tra lại / cần người thật xác nhận]
+- **Là ai**: Người trẻ tự quản lý chi tiêu, có thể là sinh viên hoặc nhân viên văn phòng mới đi làm, quen dùng mobile app nhưng không nhất thiết có kiến thức tài chính chuyên sâu.
+- **Họ hỏi AI khi nào**: Cuối tháng, khi muốn biết tiền đã đi đâu, nhóm nào chi nhiều, khoản nào tăng bất thường hoặc có gì cần kiểm tra lại.
+- **Họ cần quyết định gì sau khi hỏi AI**: Có cần kiểm tra lại giao dịch nào không, tháng sau nên chú ý nhóm chi tiêu nào, và có khoản nào cần tự xác nhận lại category.
+- **Khi nào họ dễ bị tổn thương / dễ hiểu sai**: Khi đang lo lắng về tiền bạc, đang vội, xem báo cáo ở nơi công cộng, chia sẻ màn hình với người khác, hoặc đọc summary như lời khuyên tài chính chắc chắn.
+- **Họ thường tin AI đến mức nào**: Có thể tin khá nhanh nếu báo cáo trình bày tự tin; các kết luận quan trọng vẫn cần user tự kiểm tra lại hoặc xác nhận thủ công.
 
 ---
 
 ## 4. Bối cảnh ngành
 
-- **Sự cố tương tự đã từng xảy ra**: [...]
-- **Quy định hoặc ràng buộc liên quan**: [...]
-- **Nguồn chính thức nên ưu tiên**: [...]
+- **Sự cố tương tự đã từng xảy ra**: Các hệ thống AI/chatbot có thể làm lộ dữ liệu nhạy cảm, bịa thông tin hoặc trình bày kết luận quá chắc chắn. Với sản phẩm tài chính cá nhân, rủi ro gần nhất là privacy/data leak trong báo cáo và export/share.
+- **Quy định hoặc ràng buộc liên quan**: Cần bảo vệ dữ liệu cá nhân, giảm thu thập/hiển thị dữ liệu không cần thiết, mask thông tin định danh và cảnh báo rõ trước khi chia sẻ báo cáo có dữ liệu tài chính.
+- **Nguồn chính thức nên ưu tiên**: Chính sách bảo vệ dữ liệu cá nhân, hướng dẫn bảo mật/riêng tư của sản phẩm tài chính, báo cáo từ cơ quan quản lý hoặc nguồn báo chí uy tín về sự cố rò rỉ dữ liệu/AI.
 
 ---
 
 ## 5. Ghi chú thêm
 
-[Điền bất kỳ thông tin nào giúp AI hiểu bối cảnh: hạn chót, quy mô nhóm, nguồn dữ liệu, chính sách nội bộ, ví dụ câu hỏi thật.]
+- Chủ đề lấy từ Day 24: Track 04 — Trợ lý ghi chú và tổng hợp chi tiêu.
+- Flow chính: Flow C — Báo cáo chi tiêu cuối tháng.
+- Rủi ro chính cần xử lý: C1 — Privacy / data leak.
+- Layer chính: Input; layer phụ: UI.
+- Dữ liệu đầu vào có thể gồm giao dịch nhập tay, ví điện tử, ngân hàng, nội dung chuyển khoản, tên người nhận, khoản y tế, khoản trả nợ, khoản hỗ trợ gia đình hoặc giao dịch cá nhân riêng tư.
+- Output an toàn nên tổng hợp ở cấp category, mask chi tiết nhạy cảm và khuyến nghị user mở từng giao dịch trong chế độ riêng tư nếu cần kiểm tra.
 
 ---
 
